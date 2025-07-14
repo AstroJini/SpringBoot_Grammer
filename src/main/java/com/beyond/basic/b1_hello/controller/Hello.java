@@ -11,5 +11,4 @@ import lombok.*;
 public class Hello {
     private String name;
     private String email;
-
 }
