@@ -7,6 +7,7 @@ import com.beyond.basic.b2_board.dto.AuthorListDto;
 import com.beyond.basic.b2_board.dto.AuthorUpdatePwDto;
 import com.beyond.basic.b2_board.repository.AuthorMemoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ public class AuthorService {
 
     public void updatePassword(AuthorUpdatePwDto authorUpdatePwDto){
         Author author = authorMemoryRepository.findByEmail(authorUpdatePwDto.getEmail()).orElseThrow(()->new NoSuchElementException());
-        author.updatePw(authorUpdatePwDto.getEmail());
+        author.updatePw(authorUpdatePwDto.getPassword());
     }
 
     public void delete(Long id){

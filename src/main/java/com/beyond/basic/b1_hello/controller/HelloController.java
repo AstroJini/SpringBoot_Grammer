@@ -188,9 +188,10 @@ public class HelloController {
     public String axiosJsonFileViewPost(
 //            json과 file을 함께 처리해야할 때 RequestPart 일반적으로 활용
             @RequestPart("hello") Hello hello,
-            @RequestPart("photo") MultipartFile photo){
+            @RequestPart("photo") MultipartFile photo) {
         System.out.println(hello);
         System.out.println(photo.getOriginalFilename());
         return "OK";
     }
 }
+
