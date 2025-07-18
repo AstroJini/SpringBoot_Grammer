@@ -1,10 +1,7 @@
 package com.beyond.basic.b2_board.controller;
 
 import com.beyond.basic.b2_board.domain.Author;
-import com.beyond.basic.b2_board.dto.AuthorCreateDto;
-import com.beyond.basic.b2_board.dto.AuthorDetailDto;
-import com.beyond.basic.b2_board.dto.AuthorListDto;
-import com.beyond.basic.b2_board.dto.AuthorUpdatePwDto;
+import com.beyond.basic.b2_board.dto.*;
 import com.beyond.basic.b2_board.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,14 +23,18 @@ public class AuthorController {
     @PostMapping("/create") //postmapping 에서 반드시 post를 해야하는 것은 아님 update를 할 수도 있음 그렇기에 반드시 뭘 해야한다라고 생각하지 말 것
     public ResponseEntity<?> save(@RequestBody AuthorCreateDto authorCreateDto){
 //        만약 body부에 어떤 타입의 데이터가 들어올지 모르는 상황이라면 ? 또는 Object를 입력해주면 된다
-        try {
-            this.authorService.save(authorCreateDto);
-            return new ResponseEntity<>("OK",HttpStatus.OK);
-        }catch (IllegalArgumentException e){
-            return e.printStackTrace();
-//            생성자 매개변수: body 부분의 객체와 header부에 상태코드를 넣어 준다.
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
+//        try {
+//            this.authorService.save(authorCreateDto);
+//            return new ResponseEntity<>("ok", HttpStatus.CREATED);
+//        }catch (IllegalArgumentException e){
+//            e.printStackTrace();
+////            생성자 매개변수: body 부분의 객체와 header부에 상태코드를 넣어 준다.
+//            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+//        }
+
+//        controllerAdvice가 없었다면 위와 같이 개별적인 예외 처리가 필요하나 이제는 전역적인 예외처리가 가능하다.
+        this.authorService.save(authorCreateDto);
+        return new ResponseEntity<>("OK", HttpStatus.CREATED);
     }
 //    회원 목록 조회 : /author/list
     @GetMapping("/list")
@@ -46,32 +47,23 @@ public class AuthorController {
     @GetMapping("/detail/{inputId}")
     @ResponseBody
     public ResponseEntity<?> findById(@PathVariable Long inputId){
-        try {
-            return new ResponseEntity<>(authorService.findById(inputId), HttpStatus.OK);
-        }catch (NoSuchElementException e){
-            e.printStackTrace();
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+//        try {
+//            return new ResponseEntity<>(new CommonDto(authorService.findById(inputId), HttpStatus.OK.value(),"author is found"), HttpStatus.OK);
+//        }catch (NoSuchElementException e){
+//            e.printStackTrace();
+//            return new ResponseEntity<>(new CommonErrorDto(HttpStatus.NOT_FOUND.value(), "author is not found"), HttpStatus.NOT_FOUND);
+//        }
+        return new ResponseEntity<>(new CommonDto(authorService.findById(inputId), HttpStatus.OK.value(),"author is found"), HttpStatus.OK);
     }
 //    비밀번호 수정 : email, password -> json | /author/updatepw
 //    get : 조회 | post : 등록 | patch : 부분수정 | put : 대체 | delete : 삭제
     @PatchMapping("/updatepw")
-    public ResponseEntity<?> updatePw(@RequestBody AuthorUpdatePwDto authorUpdatePwDto){
-
-        try {
-            return new ResponseEntity<>(authorService.updatePassword(authorUpdatePwDto), HttpStatus.OK);
-        }catch (NoSuchElementException e){
-            e.printStackTrace();
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    public void updatePw(@RequestBody AuthorUpdatePwDto authorUpdatePwDto){
+        authorService.updatePassword(authorUpdatePwDto);
     }
 //    회원 탈퇴(삭제) : /author/detail/1
     @DeleteMapping("/delete/{inputId}")
-    public ResponseEntity<?> delete(@PathVariable Long inputId){
-        try {
-            return new ResponseEntity<>(authorService.delete(inputId), HttpStatus.OK);
-        }catch (NoSuchElementException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    public void delete(@PathVariable Long inputId){
+        authorService.delete(inputId);
     }
 }
