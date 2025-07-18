@@ -48,9 +48,9 @@ public class AuthorService {
     //    객체조립은 서비스 담당
     public void save(AuthorCreateDto authorCreateDto){
 //    이메일 중복 검증
-        if (authorRepository.findByEmail(authorCreateDto.getEmail()).isPresent()){
-            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
-        }
+//        if (authorRepository.findByEmail(authorCreateDto.getEmail()).isPresent()){
+//            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+//        }
 //        Author author = new Author(authorCreateDto.getName(), authorCreateDto.getEmail(), authorCreateDto.getPassword());
 //        toEntity패턴을 통해 Author객체 조립을 공통화
         Author author = authorCreateDto.authorToEntity();

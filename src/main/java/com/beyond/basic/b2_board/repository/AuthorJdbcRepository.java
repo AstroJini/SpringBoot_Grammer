@@ -21,13 +21,20 @@ public class AuthorJdbcRepository {
     @Autowired
     private DataSource dataSource;
 
+//    jdbc의 단점
+//    1. raw쿼리에서 오타가 나도 디버깅 어려움
+//    2. 데이터 추가시, 매개변수와 컬럼의 매핑을 수작업으로 해줘야만하는 불편함이 있음
+//    3. 데이터 조회시, 객체 조립을 직접 해줘야만 함.
+
     public void save(Author author){
         try {
             Connection connection = dataSource.getConnection();
             String sql = "insert into author(name, email, password) values(?,?,?)";
 //            PreparedStatement 객체로 만들어서 실행 가능한 상태로 만드는 것
             PreparedStatement ps = connection.prepareStatement(sql);
-
+            ps.setString(1, author.getName());
+            ps.setString(2, author.getEmail());
+            ps.setString(3, author.getPassword());
             ps.executeUpdate(); //추가, 수정의 경우는 excuteUpdate, 조회는 excuteQuery
         } catch (SQLException e) {
 //            unchecked  예외는 spring에서 트랜잭션 상황에서 롤백의 기준이 된다.
